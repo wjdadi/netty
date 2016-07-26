@@ -49,11 +49,10 @@ public abstract class AbstractPooledByteBufTest extends AbstractByteBufTest {
 
         buf.markReaderIndex();
         buf.markWriterIndex();
-        assertTrue(buf.release());
 
         ByteBuf buf2 = newBuffer(capacity);
 
-        assertEquals(unwrapIfNeeded(buf), unwrapIfNeeded(buf2));
+        assertTrue(buf.release());
 
         buf2.writeShort(1);
 
@@ -63,12 +62,5 @@ public abstract class AbstractPooledByteBufTest extends AbstractByteBufTest {
         assertEquals(0, buf2.readerIndex());
         assertEquals(0, buf2.writerIndex());
         assertTrue(buf2.release());
-    }
-
-    private static ByteBuf unwrapIfNeeded(ByteBuf buf) {
-        if (buf instanceof AdvancedLeakAwareByteBuf || buf instanceof SimpleLeakAwareByteBuf) {
-            return buf.unwrap();
-        }
-        return buf;
     }
 }
